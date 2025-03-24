@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lawyer Coffee Break Timer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: #1d1b2f;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            background-image: linear-gradient(to right, #ff69b4, #800080);
+        }
+
+        .container {
+            background-color: #4e4a7b;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            width: 320px;
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+        }
+
+        .title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #f9d342;
+            text-shadow: 2px 2px #ff6347;
+        }
+
+        .stress-level-container {
+            margin-bottom: 20px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2em;
+            border: 2px solid #ff6347;
+            border-radius: 12px;
+            background-color: #ffe4e1;
+            color: #800080;
+            margin-bottom: 20px;
+        }
+
+        select:focus {
+            border-color: #ff69b4;
+            background-color: #f8f8f8;
+        }
+
+        button {
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.2em;
+            width: 100%;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #f9d342;
+            color: #4e4a7b;
+        }
+
+        .timer-display {
+            font-size: 1.5em;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #f9d342;
+            text-shadow: 1px 1px #800080;
+        }
+
+        .break-message {
+            font-size: 1.2em;
+            margin-top: 15px;
+            color: #f9d342;
+            font-weight: 600;
+            text-shadow: 1px 1px #800080;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="title">This Break is Lawfully Required</h1>
+        
+        <div class="stress-level-container">
+            <label for="stressLevel">How stressed are you?</label>
+            <select id="stressLevel">
+                <option value="5">Slightly Stressed (5 mins)</option>
+                <option value="10">Moderately Stressed (10 mins)</option>
+                <option value="15">Really Stressed (15 mins)</option>
+                <option value="20">I Might Be Dying (20 mins)</option>
+                <option value="60">I Need a Witness for My Breakdown (60 mins)</option>
+            </select>
+        </div>
+
+        <button onclick="startTimer()">Start Break</button>
+
+        <p id="timer" class="timer-display">00:00</p>
+        <p id="message" class="break-message"></p>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeLeft;
+        const messages = [
+            "You took 10 minutes. Was it life-changing? Probably not.",
+            "You're back. Let's see if you still remember how to practice law.",
+            "Time's up! Go change the world... or just take another break.",
+            "10 minutes later... still no one has figured out what 'consideration' means.",
+            "You made it! Now pretend to understand the last email you received.",
+            "Time’s up. Seriously, take a real break before you lose all sanity.",
+            "The break didn’t solve everything, but it’s a start. Try again later."
+        ];
+
+        function startTimer() {
+            const stressLevel = document.getElementById('stressLevel').value;
+            timeLeft = stressLevel * 60; // Convert minutes to seconds
+            document.getElementById('message').innerText = '';
+            clearInterval(timerInterval);
+            updateTimerDisplay(timeLeft);
+
+            timerInterval = setInterval(function() {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    showMessage();
+                } else {
+                    timeLeft--;
+                    updateTimerDisplay(timeLeft);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            document.getElementById('timer').innerText = `${pad(minutes)}:${pad(remainingSeconds)}`;
+        }
+
+        function pad(number) {
+            return number < 10 ? '0' + number : number;
+        }
+
+        function showMessage() {
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            document.getElementById('message').innerText = randomMessage;
+        }
+    </script>
+</body>
+</html>
